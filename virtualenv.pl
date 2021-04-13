@@ -10,7 +10,7 @@ use File::Spec::Functions qw(file_name_is_absolute);
 use Cwd qw(abs_path);
 
 my $perl = $Config{perlpath};
-my $venv = shift || 'venv';
+my $venv = shift || 'pvenv';
 
 if (!file_name_is_absolute($venv)) {
     $venv = abs_path . "/$venv";
@@ -45,8 +45,8 @@ chmod 0755, "$venv/bin/cpanm";
 spit "$venv/bin/activate", <<EOS;
 eval \$($perl -Mlocal::lib="$venv")
 
-export _PV_OLD_PS1=\$PS1
-export PS1="(`basename $venv`)\$PS1"
+export _PV_OLD_PS1=\${PS1:-}
+export PS1="(`basename $venv`)\${PS1:-}"
 
 deactivate() {
 	. $venv/bin/deactivate
